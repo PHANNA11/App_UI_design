@@ -1,4 +1,5 @@
 import 'package:design_ex/view/profile/view/profile_screen.dart';
+import 'package:design_ex/view/shop/view/shop_scren.dart';
 import 'package:design_ex/widget/menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -30,10 +31,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ));
             },
           ),
-          // MenuWidget(
-          //   title: 'Shop Screen',
-          // ),
-          // MenuWidget(),
+          MenuWidget(
+            title: 'Shop Screen',
+            callRoute: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ShopScreen(),
+                  ));
+            },
+          ),
         ],
       ),
     );

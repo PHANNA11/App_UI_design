@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
+// ignore: must_be_immutable
 class MenuWidget extends StatelessWidget {
   MenuWidget({super.key, this.title, required this.callRoute});
   String? title = '';
@@ -18,7 +19,7 @@ class MenuWidget extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Color.fromARGB(26, 142, 135, 135),
+            color: const Color.fromARGB(26, 142, 135, 135),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
