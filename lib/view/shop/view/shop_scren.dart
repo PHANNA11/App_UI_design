@@ -1,4 +1,5 @@
 import 'package:design_ex/view/shop/model/product_model.dart';
+import 'package:design_ex/view/shop/view/cart_screen.dart';
 import 'package:design_ex/view/shop/view/detail_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -15,6 +16,7 @@ class ShopScreen extends StatefulWidget {
 class _ShopScreenState extends State<ShopScreen> {
   final searchController = TextEditingController();
   List<ProductModel> cartList = [];
+  List<ProductModel> filterList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +27,21 @@ class _ShopScreenState extends State<ShopScreen> {
         title: const Text('E-Shop'),
         actions: [
           Center(
-            child: badges.Badge(
-              showBadge: cartList.isEmpty ? false : true,
-              badgeContent: Text(cartList.length.toString()),
-              child: const Icon(
-                Icons.shopping_cart,
-                size: 30,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartScreen(list: cartList),
+                    ));
+              },
+              child: badges.Badge(
+                showBadge: cartList.isEmpty ? false : true,
+                badgeContent: Text(cartList.length.toString()),
+                child: const Icon(
+                  Icons.shopping_cart,
+                  size: 30,
+                ),
               ),
             ),
           ),
@@ -51,6 +62,15 @@ class _ShopScreenState extends State<ShopScreen> {
                     border: OutlineInputBorder(),
                     suffixIcon: Icon(Icons.search),
                     hintText: 'search product'),
+                onChanged: (value) {
+                  setState(() {
+                    filterList = productList
+                        .where((pro) => pro.name
+                            .toLowerCase()
+                            .contains(value.toLowerCase()))
+                        .toList();
+                  });
+                },
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
@@ -62,8 +82,14 @@ class _ShopScreenState extends State<ShopScreen> {
               Wrap(
                 spacing: 10,
                 runSpacing: 10,
-                children: List.generate(productList.length,
-                    (index) => productCard(pro: productList[index])),
+                children: List.generate(
+                    searchController.text.isEmpty || filterList.isEmpty
+                        ? productList.length
+                        : filterList.length,
+                    (index) => productCard(
+                        pro: searchController.text.isEmpty || filterList.isEmpty
+                            ? productList[index]
+                            : filterList[index])),
               )
             ],
           ),
