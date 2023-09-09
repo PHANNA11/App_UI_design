@@ -1,3 +1,4 @@
+import 'package:design_ex/view/management/view/home_mangement.dart';
 import 'package:design_ex/view/profile/view/profile_screen.dart';
 import 'package:design_ex/view/shop/view/shop_scren.dart';
 import 'package:design_ex/widget/menu_widget.dart';
@@ -38,6 +39,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const ShopScreen(),
+                  ));
+            },
+          ),
+          MenuWidget(
+            title: 'Management App',
+            callRoute: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeManagementScreen(),
                   ));
             },
           ),
