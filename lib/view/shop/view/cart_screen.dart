@@ -1,29 +1,35 @@
 import 'package:design_ex/view/profile/model/icon_model.dart';
+import 'package:design_ex/view/shop/controller/shopping_cart_controller.dart';
 import 'package:design_ex/view/shop/view/detail_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
 
 import '../model/product_model.dart';
 
 class CartScreen extends StatefulWidget {
-  CartScreen({super.key, required this.list});
-  List<ProductModel> list;
+  CartScreen({super.key});
+
   @override
   State<CartScreen> createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final cartController = Get.put(ShoppingCartController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart'),
       ),
-      body: ListView.builder(
-        itemCount: widget.list.length,
-        itemBuilder: (context, index) => buildCart(widget.list[index]),
-      ),
+      body: GetBuilder<ShoppingCartController>(builder: (context) {
+        return ListView.builder(
+          itemCount: cartController.productList.length,
+          itemBuilder: (context, index) =>
+              buildCart(cartController.productList[index]),
+        );
+      }),
     );
   }
 
@@ -97,16 +103,9 @@ class _CartScreenState extends State<CartScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      product.qty -= 1;
-                                      if (product.qty == 0) {
-                                        int selectIndex = widget.list
-                                            .indexWhere((element) =>
-                                                element.id == product.id);
-                                        widget.list.removeAt(selectIndex);
-                                      }
-                                    });
+                                  onTap: () async {
+                                    cartController.decrementQty(
+                                        product: product);
                                   },
                                   child: const CircleAvatar(
                                     backgroundColor: Colors.white,
@@ -141,10 +140,9 @@ class _CartScreenState extends State<CartScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      product.qty += 1;
-                                    });
+                                  onTap: () async {
+                                    cartController.incrementQty(
+                                        product: product);
                                   },
                                   child: const CircleAvatar(
                                     backgroundColor: Colors.white,

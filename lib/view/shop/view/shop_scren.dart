@@ -1,3 +1,4 @@
+import 'package:design_ex/view/shop/controller/shopping_cart_controller.dart';
 import 'package:design_ex/view/shop/model/product_model.dart';
 import 'package:design_ex/view/shop/view/cart_screen.dart';
 import 'package:design_ex/view/shop/view/detail_product_screen.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:get/get.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -17,95 +19,95 @@ class _ShopScreenState extends State<ShopScreen> {
   final searchController = TextEditingController();
   List<ProductModel> cartList = [];
   List<ProductModel> filterList = [];
-
+  final cartController = Get.put(ShoppingCartController());
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const Drawer(),
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('E-Shop'),
-        actions: [
-          Center(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CartScreen(list: cartList),
-                    ));
-              },
-              child: badges.Badge(
-                showBadge: cartList.isEmpty ? false : true,
-                badgeContent: Text(cartList.length.toString()),
-                child: const Icon(
-                  Icons.shopping_cart,
-                  size: 30,
+    return GetBuilder<ShoppingCartController>(
+        init: cartController,
+        builder: (contexts) {
+          return Scaffold(
+            drawer: const Drawer(),
+            appBar: AppBar(
+              centerTitle: true,
+              title: const Text('E-Shop'),
+              actions: [
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.to(() => CartScreen());
+                    },
+                    child: badges.Badge(
+                      showBadge:
+                          cartController.productList.isEmpty ? false : true,
+                      badgeContent:
+                          Text(cartController.productList.length.toString()),
+                      child: const Icon(
+                        Icons.shopping_cart,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 20,
+                )
+              ],
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextField(
+                      controller: searchController,
+                      decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          suffixIcon: Icon(Icons.search),
+                          hintText: 'search product'),
+                      onChanged: (value) {
+                        setState(() {
+                          filterList = productList
+                              .where((pro) => pro.name
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                              .toList();
+                        });
+                      },
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        'Popular Products',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: List.generate(
+                          searchController.text.isEmpty || filterList.isEmpty
+                              ? productList.length
+                              : filterList.length,
+                          (index) => productCard(
+                              pro: searchController.text.isEmpty ||
+                                      filterList.isEmpty
+                                  ? productList[index]
+                                  : filterList[index])),
+                    )
+                  ],
                 ),
               ),
             ),
-          ),
-          const SizedBox(
-            width: 20,
-          )
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: searchController,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.search),
-                    hintText: 'search product'),
-                onChanged: (value) {
-                  setState(() {
-                    filterList = productList
-                        .where((pro) => pro.name
-                            .toLowerCase()
-                            .contains(value.toLowerCase()))
-                        .toList();
-                  });
-                },
-              ),
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: Text(
-                  'Popular Products',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: List.generate(
-                    searchController.text.isEmpty || filterList.isEmpty
-                        ? productList.length
-                        : filterList.length,
-                    (index) => productCard(
-                        pro: searchController.text.isEmpty || filterList.isEmpty
-                            ? productList[index]
-                            : filterList[index])),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+          );
+        });
   }
 
   Widget productCard({ProductModel? pro}) => Stack(children: [
         GestureDetector(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailProductScreen(pro: pro),
-                ));
+            Get.to(() => DetailProductScreen(pro: pro));
           },
           child: DecoratedBox(
             decoration: BoxDecoration(
@@ -151,9 +153,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       ),
                       IconButton(
                           onPressed: () {
-                            setState(() {
-                              cartList.add(pro);
-                            });
+                            cartController.addToCart(product: pro);
                           },
                           icon: const Icon(
                             Icons.shopping_cart_checkout,

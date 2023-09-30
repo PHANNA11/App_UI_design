@@ -1,7 +1,9 @@
+import 'package:design_ex/view/shop/controller/shopping_cart_controller.dart';
 import 'package:design_ex/view/shop/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
 
 class DetailProductScreen extends StatefulWidget {
   DetailProductScreen({super.key, required this.pro});
@@ -21,130 +23,127 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
     });
   }
 
+  final cartController = Get.put(ShoppingCartController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.pro.name),
       ),
-      body: ListView(
-        children: [
-          Hero(
-            tag: widget.pro.id,
-            child: Image(image: NetworkImage(widget.pro.image)),
-          ),
-          Card(
-            elevation: 0,
-            margin: const EdgeInsets.all(10),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Text(
-                      'Price :\$${widget.pro.price}',
-                      style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      'Description',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10)),
+      body: GetBuilder<ShoppingCartController>(builder: (context) {
+        return ListView(
+          children: [
+            Hero(
+              tag: widget.pro.id,
+              child: Image(image: NetworkImage(widget.pro.image)),
+            ),
+            Card(
+              elevation: 0,
+              margin: const EdgeInsets.all(10),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Text(
-                        widget.pro.description,
-                        style: const TextStyle(fontSize: 18),
+                        'Price :\$${widget.pro.price}',
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red),
                       ),
                     ),
-                  ),
-                ],
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 4),
+                      child: Text(
+                        'Description',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Text(
+                          widget.pro.description,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          DecoratedBox(
-            decoration: const BoxDecoration(),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        widget.pro.qty == 1
-                            ? widget.pro.qty = 1
-                            : widget.pro.qty -= 1;
-                      });
-                    },
-                    child: const CircleAvatar(
-                      backgroundColor: Colors.white,
-                      maxRadius: 25,
-                      child: Center(
-                        child: Icon(
-                          Icons.remove,
-                          size: 30,
-                          color: Colors.black,
+            DecoratedBox(
+              decoration: const BoxDecoration(),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        cartController.decrementQty(product: widget.pro);
+                      },
+                      child: const CircleAvatar(
+                        backgroundColor: Colors.white,
+                        maxRadius: 25,
+                        child: Center(
+                          child: Icon(
+                            Icons.remove,
+                            size: 30,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  height: 50,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: const Color.fromRGBO(255, 255, 255, 1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Center(
-                    child: Text(
-                      widget.pro.qty.toString(),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Container(
+                    height: 50,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(255, 255, 255, 1),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        widget.pro.qty += 1;
-                      });
-                    },
-                    child: const CircleAvatar(
-                      backgroundColor: Colors.white,
-                      maxRadius: 25,
-                      child: Center(
-                        child: Icon(
-                          Icons.add,
-                          size: 30,
-                          color: Colors.black,
+                    child: Center(
+                      child: Text(
+                        widget.pro.qty.toString(),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        cartController.incrementQty(product: widget.pro);
+                      },
+                      child: const CircleAvatar(
+                        backgroundColor: Colors.white,
+                        maxRadius: 25,
+                        child: Center(
+                          child: Icon(
+                            Icons.add,
+                            size: 30,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        );
+      }),
       floatingActionButton: GestureDetector(
         onTap: () {
           if (isFavorite == true) {
