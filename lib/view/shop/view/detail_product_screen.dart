@@ -1,5 +1,6 @@
 import 'package:design_ex/view/shop/controller/shopping_cart_controller.dart';
 import 'package:design_ex/view/shop/model/product_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -19,6 +20,7 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
   void initState() {
     // TODO: implement initState
     setState(() {
+      cartController.countTempQty.value = 1;
       isFavorite = widget.pro.isFavorite;
     });
   }
@@ -200,38 +202,65 @@ class _DetailProductScreenState extends State<DetailProductScreen> {
           ),
           Expanded(
             flex: 3,
-            child: Center(
-              child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  height: 50,
-                  width: 200,
-                  decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.shopping_cart_checkout,
-                          size: 30,
+            child: GetBuilder<ShoppingCartController>(builder: (context) {
+              return Center(
+                child: GestureDetector(
+                  onTap: () async {
+                    if (cartController.productList.isNotEmpty &&
+                        cartController.productList
+                            .every((p0) => p0.id == widget.pro.id)) {
+                      Get.defaultDialog(
+                        title: 'Alert Noted',
+                        content: Text(
+                          '${widget.pro.name.toUpperCase()} is have ready in cart',
                         ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Add to Cart',
-                          style: TextStyle(
-                            fontSize: 20,
+                        cancel: CupertinoButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                      );
+                    } else {
+                      cartController.addToCart(product: widget.pro);
+                      Get.showSnackbar(const GetSnackBar(
+                        duration: Duration(seconds: 2),
+                        title: 'Alert ',
+                        message: 'check it',
+                        titleText: Text('Product add success'),
+                      ));
+                    }
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 200,
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Row(
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.shopping_cart_checkout,
+                            size: 30,
                           ),
                         ),
-                      )
-                    ],
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Add to Cart',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
           )
         ]),
       ),

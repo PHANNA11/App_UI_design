@@ -4,6 +4,17 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 
 class ShoppingCartController extends GetxController {
   RxList<ProductModel> productList = <ProductModel>[].obs;
+  RxInt countTempQty = 1.obs;
+  void countQtyUp() async {
+    countTempQty++;
+    update();
+  }
+
+  void countQtyDown() async {
+    countTempQty--;
+    update();
+  }
+
   void addToCart({required ProductModel? product}) async {
     if (productList.isEmpty) {
       productList.add(product!);
