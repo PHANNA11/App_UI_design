@@ -1,10 +1,15 @@
+import 'dart:developer';
+
+import 'package:design_ex/enum/shop_enum.dart';
 import 'package:design_ex/view/shop/model/product_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 class ProductController extends GetxController with StateMixin<List?> {
   List<ProductModel>? products;
-
+  RxMap<String, dynamic>? sort =
+      <String, dynamic>{'value': '', "label": 'Sort'}.obs;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -32,5 +37,29 @@ class ProductController extends GetxController with StateMixin<List?> {
     await Future.delayed(const Duration(seconds: 3));
 
     return change(value, status: RxStatus.success());
+  }
+
+  Future sortProduct() async {
+    switch (sort!['value'].value) {
+      case EnumProductSort.discount:
+        value!.assignAll([]);
+        break;
+      case EnumProductSort.lowerToUpperPrice:
+        value!.sort((a, b) => a.price.compareTo(b.price));
+        for (var temp in value!.toList()) {
+          temp as ProductModel;
+          log(temp.price.toString());
+        }
+        break;
+      case EnumProductSort.upperToLowerPrice:
+        value!.sort((a, b) => b.price.compareTo(a.price));
+        for (var temp in value!.toList()) {
+          temp as ProductModel;
+          log(temp.price.toString());
+        }
+        break;
+    }
+
+    update();
   }
 }

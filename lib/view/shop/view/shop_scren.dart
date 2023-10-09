@@ -5,6 +5,7 @@ import 'package:design_ex/view/shop/controller/shopping_cart_controller.dart';
 import 'package:design_ex/view/shop/model/product_model.dart';
 import 'package:design_ex/view/shop/view/cart_screen.dart';
 import 'package:design_ex/view/shop/view/detail_product_screen.dart';
+import 'package:design_ex/view/shop/view/filter_screen.dart';
 import 'package:design_ex/widget/shop_shrimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -16,8 +17,8 @@ class ShopScreen extends StatelessWidget {
   ShopScreen({super.key});
 
   final searchController = TextEditingController();
-  List<ProductModel> cartList = [];
-  List<ProductModel> filterList = [];
+
+  List<ProductModel>? filterList = [];
   final cartController = Get.put(ShoppingCartController());
   final productController = Get.put(ProductController());
   RxBool isGridView = true.obs;
@@ -75,6 +76,7 @@ class ShopScreen extends StatelessWidget {
                                 .toLowerCase()
                                 .contains(value.toLowerCase()))
                             .toList();
+                        cartController.refresh();
                       },
                     ),
                     Row(
@@ -111,8 +113,11 @@ class ShopScreen extends StatelessWidget {
                                   // ignore: invalid_use_of_protected_member
                                   cartController.refresh();
                                 },
-                                child: const Icon(
-                                  Icons.filter_list,
+                                child: GestureDetector(
+                                  onTap: () => Get.to(() => MyProductFilter()),
+                                  child: const Icon(
+                                    Icons.filter_list,
+                                  ),
                                 ),
                               ),
                             ),
@@ -123,10 +128,20 @@ class ShopScreen extends StatelessWidget {
                     productController.obx((state) {
                       return Wrap(
                         children: List.generate(
-                            state!.length,
+                            searchController.text.isEmpty || filterList!.isEmpty
+                                ? state!.length
+                                : filterList!.length,
                             (index) => isGridView.value
-                                ? productCard(pro: state[index])
-                                : singleProductCard(pro: state[index])),
+                                ? productCard(
+                                    pro: searchController.text.isEmpty ||
+                                            filterList!.isEmpty
+                                        ? state![index]
+                                        : filterList![index])
+                                : singleProductCard(
+                                    pro: searchController.text.isEmpty ||
+                                            filterList!.isEmpty
+                                        ? state![index]
+                                        : filterList![index])),
                       );
                     },
                         onLoading: ShopWidget().shimmerGridProductCart(),
