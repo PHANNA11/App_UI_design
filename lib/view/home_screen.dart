@@ -1,10 +1,12 @@
 import 'package:design_ex/view/management/view/home_mangement.dart';
 import 'package:design_ex/view/profile/view/profile_screen.dart';
+import 'package:design_ex/view/setting_app/views/home_setting.dart';
 import 'package:design_ex/view/shop/view/shop_scren.dart';
 import 'package:design_ex/widget/menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -50,6 +52,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   MaterialPageRoute(
                     builder: (context) => const HomeManagementScreen(),
                   ));
+            },
+          ),
+          MenuWidget(
+            title: 'App Setting',
+            callRoute: () {
+              Get.to(() => HomeSettingApp());
             },
           ),
         ],

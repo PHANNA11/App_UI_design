@@ -68,8 +68,11 @@ class MyProductFilter extends StatelessWidget {
                                         : null,
                                     child: ListTile(
                                       onTap: () async {
-                                        productController.sort!.value =
-                                            itemSort[index];
+                                        productController.sort!['value'] =
+                                            itemSort[index]['value'];
+                                        productController.update();
+                                        productController.sort!['label'] =
+                                            itemSort[index]['label'];
                                         productController.update();
                                         productController.refresh();
                                       },

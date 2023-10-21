@@ -39,8 +39,8 @@ class ProductController extends GetxController with StateMixin<List?> {
     return change(value, status: RxStatus.success());
   }
 
-  Future sortProduct() async {
-    switch (sort!['value'].value) {
+  sortProduct() async {
+    switch (sort!['value']) {
       case EnumProductSort.discount:
         value!.assignAll([]);
         break;

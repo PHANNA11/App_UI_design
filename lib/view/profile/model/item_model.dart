@@ -33,4 +33,9 @@ List<ItemModel> listItems = [
       color: Colors.blueGrey,
       subTitle: 'allow notification alert',
       title: 'Notification'),
+  ItemModel(
+      icon: Icons.notification_important,
+      color: Colors.blueGrey,
+      subTitle: 'allow notification alert',
+      title: 'Notification'),
 ];
