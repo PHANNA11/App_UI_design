@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (context) => ProfileScreen(),
                   ));
             },
+            imageIcons: 'assets/icons/software-engineer.png',
           ),
           MenuWidget(
             title: 'Shop Screen',
@@ -43,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (context) => ShopScreen(),
                   ));
             },
+            imageIcons: 'assets/icons/store.png',
           ),
           MenuWidget(
             title: 'Management App',
@@ -53,12 +55,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (context) => const HomeManagementScreen(),
                   ));
             },
+            imageIcons: 'assets/icons/management.png',
           ),
           MenuWidget(
             title: 'App Setting',
             callRoute: () {
               Get.to(() => HomeSettingApp());
             },
+            imageIcons: 'assets/icons/settings.png',
           ),
         ],
       ),

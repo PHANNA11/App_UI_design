@@ -4,9 +4,10 @@ import 'package:flutter/src/widgets/placeholder.dart';
 
 // ignore: must_be_immutable
 class MenuWidget extends StatelessWidget {
-  MenuWidget({super.key, this.title, required this.callRoute});
+  MenuWidget({super.key, this.title, required this.callRoute, this.imageIcons});
   String? title = '';
   final void Function() callRoute;
+  String? imageIcons;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,11 +25,19 @@ class MenuWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Container(
+                height: 60,
+                width: 60,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(imageIcons.toString()))),
+              ),
               Text(
                 title!,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              Icon(Icons.arrow_forward_ios_outlined)
+              const Icon(Icons.arrow_forward_ios_outlined)
             ],
           ),
         ),
