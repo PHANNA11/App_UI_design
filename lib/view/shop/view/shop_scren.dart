@@ -127,6 +127,7 @@ class ShopScreen extends StatelessWidget {
                     ),
                     productController.obx((state) {
                       return Wrap(
+                        spacing: 10,
                         children: List.generate(
                             searchController.text.isEmpty || filterList!.isEmpty
                                 ? state!.length

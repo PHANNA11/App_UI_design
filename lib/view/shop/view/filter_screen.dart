@@ -68,13 +68,13 @@ class MyProductFilter extends StatelessWidget {
                                         : null,
                                     child: ListTile(
                                       onTap: () async {
-                                        productController.sort!['value'] =
-                                            itemSort[index]['value'];
+                                        productController.sort!.value =
+                                            itemSort[index];
                                         productController.update();
-                                        productController.sort!['label'] =
-                                            itemSort[index]['label'];
-                                        productController.update();
+
+                                        // ignore: invalid_use_of_protected_member
                                         productController.refresh();
+                                        Get.back();
                                       },
                                       title: Text(itemSort[index]['label']),
                                     ),
@@ -94,7 +94,9 @@ class MyProductFilter extends StatelessWidget {
                       CupertinoButton(
                           color: Colors.red,
                           child: const Text('Cancel'),
-                          onPressed: () {}),
+                          onPressed: () {
+                            Get.back();
+                          }),
                       CupertinoButton(
                           color: Colors.blue,
                           child: const Text('Filter'),

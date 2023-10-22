@@ -40,26 +40,30 @@ class ProductController extends GetxController with StateMixin<List?> {
   }
 
   sortProduct() async {
+    change(value!, status: RxStatus.loadingMore());
     switch (sort!['value']) {
-      case EnumProductSort.discount:
-        value!.assignAll([]);
+      case 'discount':
+        //  value!.assignAll([]);
         break;
-      case EnumProductSort.lowerToUpperPrice:
+      case 'lower_to_upper_price':
         value!.sort((a, b) => a.price.compareTo(b.price));
         for (var temp in value!.toList()) {
           temp as ProductModel;
           log(temp.price.toString());
         }
         break;
-      case EnumProductSort.upperToLowerPrice:
+      case 'upper_to_lower_price':
         value!.sort((a, b) => b.price.compareTo(a.price));
         for (var temp in value!.toList()) {
           temp as ProductModel;
           log(temp.price.toString());
         }
         break;
+      case 'best_selling':
+        //  value!.assignAll([]);
+        break;
     }
-
+    change(value, status: RxStatus.success());
     update();
   }
 }
