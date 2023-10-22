@@ -4,8 +4,6 @@ import 'package:design_ex/view/setting_app/views/home_setting.dart';
 import 'package:design_ex/view/shop/view/shop_scren.dart';
 import 'package:design_ex/widget/menu_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,18 +23,18 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           MenuWidget(
-            title: 'Profile Screen',
+            title: 'profile'.tr,
             callRoute: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfileScreen(),
+                    builder: (context) => const ProfileScreen(),
                   ));
             },
             imageIcons: 'assets/icons/software-engineer.png',
           ),
           MenuWidget(
-            title: 'Shop Screen',
+            title: 'shop'.tr,
             callRoute: () {
               Navigator.push(
                   context,
@@ -47,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
             imageIcons: 'assets/icons/store.png',
           ),
           MenuWidget(
-            title: 'Management App',
+            title: 'management'.tr,
             callRoute: () {
               Navigator.push(
                   context,
@@ -58,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
             imageIcons: 'assets/icons/management.png',
           ),
           MenuWidget(
-            title: 'App Setting',
+            title: 'setting'.tr,
             callRoute: () {
               Get.to(() => HomeSettingApp());
             },

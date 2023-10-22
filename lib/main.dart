@@ -1,4 +1,5 @@
 import 'package:design_ex/view/home_screen.dart';
+import 'package:design_ex/view/setting_app/controller/languege_controller.dart';
 import 'package:design_ex/view/setting_app/controller/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ void main(List<String> args) {
 }
 
 final themeController = Get.put(ThemeModeController());
+TraslateLanguege traslateLanguege = Get.put(TraslateLanguege());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -18,7 +20,9 @@ class MyApp extends StatelessWidget {
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: themeController.theme,
+        translations: LocalModel(),
         home: const HomeScreen(),
+        locale: traslateLanguege.lang,
       );
     });
   }

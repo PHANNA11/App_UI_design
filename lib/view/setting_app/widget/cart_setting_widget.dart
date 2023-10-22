@@ -7,15 +7,22 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:get/get.dart';
 
+import '../controller/font_controller.dart';
+
 class CartSettingWidget extends StatelessWidget {
   CartSettingWidget({super.key});
+  final fontController = Get.put(FontController());
   List<Map<String, dynamic>> listItem = [
     {
       'label': 'Light / Dark',
       'value': themeController.isDark,
       'function': themeController.changeTheme
     },
-    {'label': 'ខ្មែរ / english', 'value': false, 'function': (val) {}}
+    {
+      'label': 'ខ្មែរ / english',
+      'value': traslateLanguege.isEnglish,
+      'function': traslateLanguege.changeLang
+    }
   ];
   @override
   Widget build(BuildContext context) {
@@ -54,10 +61,11 @@ class CartSettingWidget extends StatelessWidget {
           children: [
             Text(
               title.toString(),
-              style: const TextStyle(
+              style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                  color: Colors.black,
+                  fontFamily: fontController.fontTheme.value.toString()),
             ),
             CupertinoSwitch(
               value: valuecheck!,
